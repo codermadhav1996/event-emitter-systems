@@ -23,6 +23,18 @@ describe('AppController (e2e)', () => {
       .expect('Hello World!');
   });
 
+  it('/events (POST)', () => {
+    return request(app.getHttpServer())
+      .post('/events')
+      .send({ eventName: 'order.created', payload: { orderId: 'order-123' } })
+      .expect(201)
+      .expect({
+        eventName: 'order.created',
+        listenerCount: 0,
+        status: 'published',
+      });
+  });
+
   afterEach(async () => {
     await app.close();
   });
