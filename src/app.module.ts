@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ConfigModule } from '@nestjs/config';
+import { OrderModule } from './orders/order.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ConfigModule } from '@nestjs/config';
       verboseMemoryLeak: true,
       ignoreErrors: false,
     }),
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
