@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ConfigModule } from '@nestjs/config';
 import { OrderModule } from './orders/order.module';
+import { InventoryModule } from './inventory/inventory.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { OrderModule } from './orders/order.module';
       ignoreErrors: false,
     }),
     OrderModule,
+    InventoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
