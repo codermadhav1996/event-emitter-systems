@@ -2,12 +2,17 @@ import { Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entities/order.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ORDER_EVENTS } from './events/order-events.constants';
+import { OrderCreatedEvent } from './events/order-created.event';
 
 @Injectable()
 export class OrderService {
   private readonly logger = new Logger(OrderService.name);
 
   private readonly orders: Order[] = [];
+
+  constructor(private readonly eventEmitter: EventEmitter2) {}
 
   create(dto: CreateOrderDto): Order {
     const total = dto.items.reduce(
@@ -26,6 +31,15 @@ export class OrderService {
 
     this.orders.push(order);
     this.logger.log(`Order ${order.id} created for user ${order.userId}`);
+    this.eventEmitter.emit(
+      ORDER_EVENTS.CREATED,
+      new OrderCreatedEvent(
+        order.id,
+        order?.userId,
+        order?.items,
+        order?.total,
+      ),
+    );
     return order;
   }
 
